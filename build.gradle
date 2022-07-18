@@ -2,7 +2,16 @@ plugins {
 	id 'org.springframework.boot' version '2.7.1'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+
+	// Spotless
+	// https://mvnrepository.com/artifact/com.diffplug.spotless/spotless-plugin-gradle
+	id "com.diffplug.spotless" version "6.7.2"
+
+	// checkstyle
+	id 'checkstyle'
 }
+
+apply plugin: "com.diffplug.spotless"
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
@@ -18,12 +27,50 @@ repositories {
 	mavenCentral()
 }
 
+// ライブラリのバージョンを指定する
+ext.versions = [
+		'apacheCommonsLang3': '3.12.0',
+		'apacheCommonsCollections': '4.4'
+]
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// logback
+	// https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
+	implementation 'ch.qos.logback:logback-classic:1.2.11'
+
+	// JUnit 5
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'junit', module:'junit'
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+
+	// https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+	implementation "org.apache.commons:commons-lang3:${versions.apacheCommonsLang3}"
+
+	// https://mvnrepository.com/artifact/org.apache.commons/commons-collections4
+	implementation "org.apache.commons:commons-collections4:${versions.apacheCommonsCollections}"
+}
+
+checkstyle {
+	toolVersion = '10.3' // リリースノートを確認し最新バージョンにする。しないとエラーになる。
+	configFile = file("${rootDir}/config/checkstyle/google_checks.xml")
+}
+
+// テストはcheckstyleの対象外にする
+checkstyleTest.enabled = false
+
+spotless {
+	java {
+		googleJavaFormat()
+	}
 }
 
 tasks.named('test') {
