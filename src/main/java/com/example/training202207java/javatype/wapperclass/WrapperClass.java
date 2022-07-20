@@ -34,7 +34,7 @@ public class WrapperClass {
     final Integer number1 = null;
     final Integer number2 = Integer.valueOf(1000);
 
-//    System.out.println(number1.equals(number2)); // NullPointerExceptionが発生する
+    //    System.out.println(number1.equals(number2)); // NullPointerExceptionが発生する
   }
 
   /** Integerの一般的な比較. */

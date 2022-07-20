@@ -41,7 +41,7 @@ public class ExceptionSample {
 
   /** 例外をキャッチしないサンプル. */
   public void doesNotCatchException() {
-//    final Integer value = Integer.valueOf("文字列");
+    //    final Integer value = Integer.valueOf("文字列");
   }
 
   /** 例外をキャッチするサンプル. */
